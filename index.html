@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Firmament documentation: alt detection for Paper that alerts staff and never blocks a login.">
+    <meta name="description" content="Firmament: staff tooling for reviewing linked accounts on a Paper server.">
     <meta name="theme-color" content="#0a0611">
     <title>Firmament | Paper Plugin</title>
     <link rel="icon" href="favicon.ico" sizes="any">
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <meta property="og:title" content="Firmament">
-    <meta property="og:description" content="Alt detection that alerts staff and never blocks a login.">
+    <meta property="og:description" content="Staff tooling for reviewing linked accounts.">
     <meta name="twitter:card" content="summary">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,11 +23,8 @@
       <div class="nav-inner">
         <a class="nav-logo" href="#top" aria-label="Firmament home">Firmament</a>
         <div class="nav-links">
-          <a href="#what">What it does</a>
-          <a href="#tree">The tree</a>
-          <a href="#import">Import</a>
+          <a href="#what">Overview</a>
           <a href="#commands">Commands</a>
-          <a href="#limits">Limits</a>
         </div>
       </div>
     </nav>
@@ -36,90 +33,47 @@
       <section class="plugin-hero" aria-labelledby="page-title">
         <div class="hero-copy">
           <p class="eyebrow">PAPER PLUGIN</p>
-          <h1 id="page-title">It watches. It never shuts the door.</h1>
-          <p>Firmament records which accounts join from which addresses and tells your staff when that
-             looks like one person wearing several names. There is no code path in it that refuses a
-             connection &mdash; which is precisely what lets it run on a server that cannot afford to
-             turn away a real player by mistake.</p>
+          <h1 id="page-title">Know who you are dealing with.</h1>
+          <p>Firmament is staff tooling for reviewing player accounts. It keeps a quiet record of who
+             has been on your server, surfaces accounts that appear to be connected, and gives your
+             team a way to look at that before making a call.</p>
           <div class="command-card"><span class="command-label">LOOKUP</span><code>/alts &lt;player&gt;</code></div>
         </div>
       </section>
 
       <section id="what" class="section" aria-labelledby="what-title">
         <div class="section-heading reveal">
-          <p class="eyebrow">THE IDEA</p>
-          <h2 id="what-title">Detection, not prevention.</h2>
-          <p>Blocking suspected alts means blocking some number of real players, silently, forever.
-             They cannot appeal to you because they never got in &mdash; which is why servers that do
-             it rarely believe they have a problem. Firmament takes the other trade: it never denies
-             anyone, and it makes sure you find out fast.</p>
+          <p class="eyebrow">OVERVIEW</p>
+          <h2 id="what-title">Built for the people running the server.</h2>
+          <p>Everything it does is for staff. Players never see it, are never gated by it, and are
+             never interrupted by it &mdash; it adds nothing to the experience of joining and playing.</p>
         </div>
         <div class="config-grid">
-          <article class="config-card card-surface reveal" data-d="1"><span class="config-icon">shared address</span><h3>Someone else has been here</h3><p>An arriving account whose address already belongs to a different account raises an alert. That is the whole primary signal, and it costs two lookups in memory.</p></article>
-          <article class="config-card card-surface reveal" data-d="2"><span class="config-icon">first join</span><h3>Never seen before</h3><p>Every evasion begins with a first join. Broad, and on a busy server noisy &mdash; turn it off if it drowns the alerts you actually want.</p></article>
-          <article class="config-card card-surface reveal" data-d="3"><span class="config-icon">watch list</span><h3>Names repeat</h3><p>People are creatures of habit with usernames. Configured fragments match case-insensitively with the Floodgate prefix stripped, so one entry covers Java and Bedrock alike.</p></article>
-          <article class="config-card card-surface reveal" data-d="4"><span class="config-icon">hosting note</span><h3>A hint, never a verdict</h3><p>Addresses in configured hosting ranges are annotated on the alert. Nothing is ever done about it. Plenty of ordinary players use a VPN, and some carriers route through space that looks like a datacenter.</p></article>
+          <article class="config-card card-surface reveal" data-d="1"><span class="config-icon">review</span><h3>A view worth reading</h3><p>Linked accounts are laid out visually rather than as a wall of text, so what connects to what is legible at a glance. Click through to explore related accounts without retyping a command.</p></article>
+          <article class="config-card card-surface reveal" data-d="2"><span class="config-icon">notify</span><h3>Told, not buried</h3><p>Notices reach staff in game, the server console, and Discord through DiscordSRV. Configurable, so a busy server can dial down to only what matters.</p></article>
+          <article class="config-card card-surface reveal" data-d="3"><span class="config-icon">history</span><h3>Useful from day one</h3><p>It can draw on records your server has already been keeping, so it is worth something the day it is installed rather than months later.</p></article>
+          <article class="config-card card-surface reveal" data-d="4"><span class="config-icon">light</span><h3>Costs you nothing</h3><p>A small jar with no external dependencies and no third-party services. Nothing it does sits between a player and getting into the game.</p></article>
         </div>
-        <p class="fine-print reveal">Alerts reach in-game staff holding <code>firmament.alerts</code>, the console, and Discord through DiscordSRV if you have it. Discord dispatch happens off the main thread, so a slow API call can never sit in front of a login.</p>
-      </section>
-
-      <section id="tree" class="section" aria-labelledby="tree-title">
-        <div class="section-heading reveal">
-          <p class="eyebrow">THE VIEW</p>
-          <h2 id="tree-title">The link, and the evidence for it, on one row.</h2>
-          <p>A flat list of names answers <em>who else</em> but not <em>how do you know</em>, and the
-             second question is the one you have to answer before acting. The tree puts the account at
-             the top, one row per address beneath it, and the accounts seen on that address along the
-             row.</p>
-        </div>
-        <div class="command-card reveal"><span class="command-label">SHAPE</span><code>root &rarr; address &rarr; the accounts on it</code></div>
-        <div class="config-grid">
-          <article class="config-card card-surface reveal" data-d="1"><span class="config-icon">re-root</span><h3>Click to walk</h3><p>Clicking any linked account re-roots the tree on it, so you can follow a shared address to the next account and see what <em>it</em> touches. That second hop is where the accounts a one-step lookup misses actually live.</p></article>
-          <article class="config-card card-surface reveal" data-d="2"><span class="config-icon">transitive</span><h3>It closes the set</h3><p>Two accounts can share nothing directly and still belong to one person, linked through a third. The walk follows accounts to addresses to accounts until nothing new appears.</p></article>
-          <article class="config-card card-surface reveal" data-d="3"><span class="config-icon">platform</span><h3>Java and Bedrock</h3><p>Java accounts draw as player heads. Bedrock accounts deliberately do not &mdash; asking Mojang for a profile behind a Floodgate name starts a lookup that can never succeed.</p></article>
-        </div>
-      </section>
-
-      <section id="import" class="section" aria-labelledby="import-title">
-        <div class="section-heading reveal">
-          <p class="eyebrow">DAY ONE</p>
-          <h2 id="import-title">Your history already exists.</h2>
-          <p>A watcher that starts from nothing is useless for months &mdash; and the alt you want to
-             catch signed up long before you installed anything. Your server has been printing the
-             address on every login since forever, and the rotated logs are still there.</p>
-        </div>
-        <div class="command-card reveal"><span class="command-label">BACKFILL</span><code>/firmament import</code></div>
-        <p class="fine-print reveal">Reads <code>.log</code> and <code>.log.gz</code> alike, off the main thread, and only when you ask &mdash; never at startup, because spending seconds of disk unannounced while players are online is rude. Running it twice writes nothing the second time. A file that will not open is skipped and counted rather than aborting the run, so one truncated archive does not cost you the other nine hundred.</p>
+        <p class="fine-print reveal">Firmament informs staff decisions; it does not make them. Anything it surfaces is a starting point for a person to look at, never a conclusion.</p>
       </section>
 
       <section id="commands" class="section" aria-labelledby="commands-title">
         <div class="section-heading reveal">
-          <p class="eyebrow">OPERATIONS</p>
-          <h2 id="commands-title">Four commands, one of them the point.</h2>
+          <p class="eyebrow">ADMIN COMMANDS</p>
+          <h2 id="commands-title">Four commands.</h2>
         </div>
         <div class="config-grid">
-          <article class="config-card card-surface reveal" data-d="1"><span class="config-icon">/alts</span><h3>The tree</h3><p>Opens the view for a player. Console gets the same answer as text, since RCON cannot open an inventory.</p></article>
-          <article class="config-card card-surface reveal" data-d="2"><span class="config-icon">/firmament import</span><h3>Backfill</h3><p>Reads history out of the server&rsquo;s own logs.</p></article>
-          <article class="config-card card-surface reveal" data-d="3"><span class="config-icon">/firmament stats</span><h3>What it knows</h3><p>Pairings held, watch fragments loaded, hosting ranges parsed, and whether Floodgate was found.</p></article>
-          <article class="config-card card-surface reveal" data-d="4"><span class="config-icon">/firmament reload</span><h3>Re-read config</h3><p>Watch list, hosting ranges and alert routing, without a restart.</p></article>
+          <article class="config-card card-surface reveal" data-d="1"><span class="config-icon">/alts &lt;player&gt;</span><h3>Review a player</h3><p>Opens the account view. Works from console as text.</p></article>
+          <article class="config-card card-surface reveal" data-d="2"><span class="config-icon">/firmament import</span><h3>Build the history</h3><p>Populates records from what the server already has. Run once, when you install.</p></article>
+          <article class="config-card card-surface reveal" data-d="3"><span class="config-icon">/firmament stats</span><h3>Status</h3><p>What it currently holds and which optional integrations were found.</p></article>
+          <article class="config-card card-surface reveal" data-d="4"><span class="config-icon">/firmament reload</span><h3>Re-read config</h3><p>Applies configuration changes without a restart.</p></article>
         </div>
-        <p class="fine-print reveal">Permissions: <code>firmament.lookup</code> for <code>/alts</code>, <code>firmament.admin</code> for the rest, <code>firmament.alerts</code> to receive alerts in game. All three expose player IP addresses &mdash; treat them as a privacy boundary, not a convenience toggle.</p>
-      </section>
-
-      <section id="limits" class="section" aria-labelledby="limits-title">
-        <div class="section-heading reveal">
-          <p class="eyebrow">HONESTY</p>
-          <h2 id="limits-title">What it cannot tell you.</h2>
-        </div>
-        <div class="limits-row off"><h3>A household looks like an alt</h3><p>Two siblings on one connection are indistinguishable from one person with two accounts. Firmament reports the link and says so on every lookup; the judgement is yours and it cannot be automated away.</p></div>
-        <div class="limits-row mid"><h3>A new network breaks the chain</h3><p>Correlation is by address. Someone who changes network between accounts will not link, which is why the name watch list exists alongside it.</p></div>
-        <div class="limits-row up"><h3>It will not stop anyone</h3><p>By design. If you need people kept out, a whitelist is the honest way to do it, and it is a different feature than this one.</p></div>
-        <p class="fine-print reveal">Storage is one tab-separated line per name-and-address pairing, appended, never rewritten &mdash; a player joining from home nightly costs one line, not one a night. It is a list of your players and their IP addresses. Keep it off any public repository.</p>
+        <p class="fine-print reveal">Permissions: <code>firmament.lookup</code> to review players, <code>firmament.admin</code> for the rest, <code>firmament.alerts</code> to receive notices in game. All three expose player connection details &mdash; grant them the way you would grant console access.</p>
       </section>
     </main>
 
     <footer>
-      <p><span class="footer-logo">Firmament</span> &middot; Alt detection that never closes the door.</p>
+      <p><span class="footer-logo">Firmament</span> &middot; Staff tooling for Paper servers.</p>
       <p>Documentation only &mdash; Firmament is not currently available for download. Plugin source remains private.</p>
     </footer>
   </body>
